@@ -53,61 +53,61 @@ $m_iClip1 = $client_dll -split "`n" | Where-Object { $_ -like "*pub const m_iCli
     } elseif ($_ -like "*pub const dwViewMatrix: usize =*") {
         $dwViewMatrix.Substring(4)
     } elseif ($_ -like "*pub const m_iHealth: usize =*") {
-        $m_iHealth.Substring(4)
+        $m_iHealth.Substring(8)
     } elseif ($_ -like "*pub const m_iTeamNum: usize =*") {
-        $m_iTeamNum.Substring(4)
+        $m_iTeamNum.Substring(8)
     } elseif ($_ -like "*pub const m_pGameSceneNode: usize =*") {
-        $m_pGameSceneNode.Substring(4)
+        $m_pGameSceneNode.Substring(8)
     } elseif ($_ -like "*pub const m_fFlags: usize =*") {
-        $m_fFlags.Substring(4)
+        $m_fFlags.Substring(8)
     } elseif ($_ -like "*pub const m_nSubclassID: usize =*") {
-        $m_nSubclassID.Substring(4)
+        $m_nSubclassID.Substring(8)
     } elseif ($_ -like "*pub const m_hPawn: usize =*") {
-        $m_hPawn.Substring(4)
+        $m_hPawn.Substring(8)
     } elseif ($_ -like "*pub const m_iszPlayerName: usize =*") {
-        $m_iszPlayerName.Substring(4)
+        $m_iszPlayerName.Substring(8)
     } elseif ($_ -like "*pub const m_hPlayerPawn: usize =*") {
-        $m_hPlayerPawn.Substring(4)
+        $m_hPlayerPawn.Substring(8)
     } elseif ($_ -like "*pub const m_bPawnIsAlive: usize =*") {
-        $m_bPawnIsAlive.Substring(4)
+        $m_bPawnIsAlive.Substring(8)
     } elseif ($_ -like "*pub const mm_pObserverServices: usize =*") {
-        $mm_pObserverServices.Substring(4)
+        $mm_pObserverServices.Substring(8)
     } elseif ($_ -like "*pub const m_pCameraServices: usize =*") {
-        $m_pCameraServices.Substring(4)
+        $m_pCameraServices.Substring(8)
     } elseif ($_ -like "*pub const m_vOldOrigin: usize =*") {
-        $m_vOldOrigin.Substring(4)
+        $m_vOldOrigin.Substring(8)
     } elseif ($_ -like "*pub const m_vecLastClipCameraPos: usize =*") {
-        $m_vecLastClipCameraPos.Substring(4)
+        $m_vecLastClipCameraPos.Substring(8)
     } elseif ($_ -like "*pub const m_angEyeAngles: usize =*") {
-        $m_angEyeAngles.Substring(4)
+        $m_angEyeAngles.Substring(8)
     } elseif ($_ -like "*pub const m_pClippingWeapon: usize =*") {
-        $m_pClippingWeapon.Substring(4)
+        $m_pClippingWeapon.Substring(8)
     } elseif ($_ -like "*pub const m_iIDEntIndex: usize =*") {
-        $m_iIDEntIndex.Substring(4)
+        $m_iIDEntIndex.Substring(8)
     } elseif ($_ -like "*pub const m_entitySpottedState: usize =*") {
-        $m_entitySpottedState[0].Substring(4)
+        $m_entitySpottedState[0].Substring(8)
     } elseif ($_ -like "*pub const m_ArmorValue: usize =*") {
-        $m_ArmorValue.Substring(4)
+        $m_ArmorValue.Substring(8)
     } elseif ($_ -like "*pub const m_iShotsFired: usize =*") {
-        $m_iShotsFired.Substring(4)
+        $m_iShotsFired.Substring(8)
     } elseif ($_ -like "*pub const m_aimPunchCache: usize =*") {
-        $m_aimPunchCache.Substring(4)
+        $m_aimPunchCache.Substring(8)
     } elseif ($_ -like "*pub const m_vecAbsOrigin: usize =*") {
-        $m_vecAbsOrigin.Substring(4)
+        $m_vecAbsOrigin.Substring(8)
     } elseif ($_ -like "*pub const m_iFOVStart: usize =*") {
-        $m_iFOVStart.Substring(4)
+        $m_iFOVStart.Substring(8)
     } elseif ($_ -like "*pub const m_bSpottedByMask: usize =*") {
-        $m_bSpottedByMask.Substring(4)
+        $m_bSpottedByMask.Substring(8)
     } elseif ($_ -like "*pub const m_modelState: usize =*") {
-        $m_modelState.Substring(4)
+        $m_modelState.Substring(8)
     } elseif ($_ -like "*pub const m_hObserverTarget: usize =*") {
-        $m_hObserverTarget.Substring(4)
+        $m_hObserverTarget.Substring(8)
     } elseif ($_ -like "*pub const m_nBombSite: usize =*") {
-        $m_nBombSite.Substring(4)
+        $m_nBombSite.Substring(8)
     } elseif ($_ -like "*pub const m_iMaxClip1: usize =*") {
-        $m_iMaxClip1.Substring(4)
+        $m_iMaxClip1.Substring(8)
     } elseif ($_ -like "*pub const m_iClip1: usize =*") {
-        $m_iClip1.Substring(4)
+        $m_iClip1.Substring(8)
     } else {
          $_
     }
