@@ -3,12 +3,12 @@
 pub mod Offsets {
     // https://raw.githubusercontent.com/a2x/cs2-dumper/refs/heads/main/output/offsets.rs
     pub mod client_dll {
-        pub const dwEntityList: usize = 0x1A044C0;
-        pub const dwLocalPlayerController: usize = 0x1A52D00;
+        pub const dwEntityList: usize = 0x1A044E0;
+        pub const dwLocalPlayerController: usize = 0x1A52D20;
         pub const dwLocalPlayerPawn: usize = 0x18580D0;
-        pub const dwPlantedC4: usize = 0x1A71C30;
-        pub const dwViewAngles: usize = 0x1A774D0;
-        pub const dwViewMatrix: usize = 0x1A6D260;
+        pub const dwPlantedC4: usize = 0x1A71C40;
+        pub const dwViewAngles: usize = 0x1A774E0;
+        pub const dwViewMatrix: usize = 0x1A6D280;
     }
 
     // https://raw.githubusercontent.com/a2x/cs2-dumper/refs/heads/main/output/client_dll.rs
