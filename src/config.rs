@@ -3,12 +3,12 @@
 pub mod Offsets {
     // https://raw.githubusercontent.com/a2x/cs2-dumper/refs/heads/main/output/offsets.rs
     pub mod client_dll {
-        pub const dwEntityList: usize = 0x1CBE4A0;
-        pub const dwLocalPlayerController: usize = 0x1D100C0;
-        pub const dwLocalPlayerPawn: usize = 0x1AF4A20;
-        pub const dwPlantedC4: usize = 0x1D26E00;
-        pub const dwViewAngles: usize = 0x1D2C5C0;
-        pub const dwViewMatrix: usize = 0x1D21800;
+        pub const dwEntityList: usize = 0x1CBE620;
+        pub const dwLocalPlayerController: usize = 0x1D10240;
+        pub const dwLocalPlayerPawn: usize = 0x1AF4B80;
+        pub const dwPlantedC4: usize = 0x1D27180;
+        pub const dwViewAngles: usize = 0x1D2C7C0;
+        pub const dwViewMatrix: usize = 0x1D21A00;
     }
 
     // https://raw.githubusercontent.com/a2x/cs2-dumper/refs/heads/main/output/client_dll.rs
@@ -41,7 +41,7 @@ pub mod Offsets {
         pub const m_angEyeAngles: usize = 0x16A0; // QAngle
         pub const m_pClippingWeapon: usize = 0x1620; // C_CSWeaponBase*
         pub const m_iIDEntIndex: usize = 0x1734; // CEntityIndex
-        pub const m_entitySpottedState: usize = 0x1D58; // EntitySpottedState_t
+        pub const m_entitySpottedState: usize = 0x1E08; // EntitySpottedState_t
         pub const m_ArmorValue: usize = 0x28E4; // int32
         pub const m_iShotsFired: usize = 0x28C4; // int32
     }
