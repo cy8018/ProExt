@@ -205,7 +205,7 @@ pub fn run_cheats_thread(hwnd: HWND, self_hwnd: HWND) {
                 continue;
             }
 
-            // Update Pawn (only if we have a valid pawn address)
+            // Update Pawn (always try if we have a valid pawn address)
             if !no_pawn {
                 if !local_entity.update_pawn(local_pawn_address, window_info, game.view) {
                     if !(config.settings.enabled && config.settings.show_on_spectate) {
@@ -215,6 +215,11 @@ pub fn run_cheats_thread(hwnd: HWND, self_hwnd: HWND) {
 
                     no_pawn = true;
                 } else {
+                    no_pawn = false;
+                }
+            } else if local_pawn_address != 0 {
+                // Pawn address became valid, try to update
+                if local_entity.update_pawn(local_pawn_address, window_info, game.view) {
                     no_pawn = false;
                 }
             }
