@@ -138,64 +138,114 @@ pub fn run_cheats_thread(hwnd: HWND, self_hwnd: HWND) {
                 (*render_list.lock().unwrap()).remove("cheat_list");
             }
 
+            // Check if memory addresses are still valid
             if !rpm(matrix_address, &mut (*GAME.lock().unwrap()).view.matrix, 64) {
+                // Memory read failed - likely map change or round restart
+                // Try to reinitialize game addresses
+                if !crate::cheat::classes::game::init_game_address() {
+                    remove_ui_elements();
+                    thread::sleep(std::time::Duration::from_millis(1000)); // Wait before retry
+                    continue;
+                } else {
+                    // Update our local copy
+                    remove_ui_elements();
+                    continue; // Start fresh with new addresses
+                }
+            }
+
+            if !update_entity_list_entry() {
                 remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(500));
                 continue;
             }
 
-            update_entity_list_entry();
+            // Validate critical addresses before proceeding
+            let game = GAME.lock().unwrap().clone();
+            if game.address.local_controller == 0 || 
+               game.address.entity_list_entry == 0 ||
+               game.address.matrix == 0 {
+                remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(500));
+                continue;
+            }
 
             let mut local_controller_address = 0;
             let mut local_pawn_address = 0;
 
+            // Read controller address with error handling
             if !rpm_auto(controller_address, &mut local_controller_address) {
                 remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(100));
                 continue;
             }
 
+            // Read pawn address with error handling
             if !rpm_auto(pawn_address, &mut local_pawn_address) {
                 remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(100));
                 continue;
             }
 
-            // Update Controller & Pawn
+            // Validate addresses are not null
+            if local_controller_address == 0 {
+                remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(200));
+                continue;
+            }
+
+            if local_pawn_address == 0 {
+                no_pawn = true;
+                // Continue processing as spectating might still want to show ESP
+            }
+
+            // Update Controller (always needed for team detection)
             if !local_entity.update_controller(local_controller_address) {
                 remove_ui_elements();
+                thread::sleep(std::time::Duration::from_millis(100));
                 continue;
             }
 
-            if !local_entity.update_pawn(local_pawn_address, window_info, game.view) {
-                if !(config.settings.enabled && config.settings.show_on_spectate) {
-                    remove_ui_elements();
-                    continue;
-                };
+            // Update Pawn (only if we have a valid pawn address)
+            if !no_pawn {
+                if !local_entity.update_pawn(local_pawn_address, window_info, game.view) {
+                    if !(config.settings.enabled && config.settings.show_on_spectate) {
+                        remove_ui_elements();
+                        continue;
+                    };
 
-                no_pawn = true;
-            } else {
-                no_pawn = false;
+                    no_pawn = true;
+                } else {
+                    no_pawn = false;
+                }
             }
 
-            // Bomb Data
+            // Bomb Data - with error handling for round transitions
             let (bomb_planted, bomb_site, bomb_pos): (bool, Option<String>, Option<Vector3<f32>>) = if !no_pawn && (config.esp.bomb_enabled || (config.misc.enabled && config.misc.bomb_timer_enabled)) {                
                 let bomb_address = game.address.bomb;
-                let bomb_planted = get_bomb_planted(bomb_address);
-
-                if bomb_planted {
-                    let planted_bomb = get_bomb(bomb_address);
-
-                    let bomb_site = match planted_bomb {
-                        Some(bomb) => get_bomb_site(bomb),
-                        None => None
-                    };
-                    
-                    let bomb_pos = match planted_bomb {
-                        Some(bomb) => get_bomb_position(bomb),
-                        None => None
-                    };
-
-                    (bomb_planted, bomb_site, bomb_pos)
+                
+                // Check if bomb address is valid before proceeding
+                if bomb_address == 0 {
+                    (false, None, None)
                 } else {
-                    (bomb_planted, None, None)
+                    let bomb_planted = get_bomb_planted(bomb_address);
+
+                    if bomb_planted {
+                        let planted_bomb = get_bomb(bomb_address);
+
+                        let bomb_site = match planted_bomb {
+                            Some(bomb) => get_bomb_site(bomb),
+                            None => None
+                        };
+                        
+                        let bomb_pos = match planted_bomb {
+                            Some(bomb) => get_bomb_position(bomb),
+                            None => None
+                        };
+
+                        (bomb_planted, bomb_site, bomb_pos)
+                    } else {
+                        (bomb_planted, None, None)
+                    }
                 }
             } else {
                 (false, None, None)
@@ -240,13 +290,21 @@ pub fn run_cheats_thread(hwnd: HWND, self_hwnd: HWND) {
             // Local Data
             let mut local_player_controller_index = 1;
 
-            // Entities
+            // Entities - with improved error handling for map transitions
             for i in 0 .. 64 {
                 let mut entity = Entity::default();
                 let mut entity_address: u64 = 0;
 
+                // Check if entity list entry address is valid
+                if game.address.entity_list_entry == 0 {
+                    // Entity list not initialized, likely in map transition
+                    remove_esp(i);
+                    continue;
+                }
+
                 if let Some(sum) = ((i + 1) as u64).checked_mul(0x78) {
                     if !rpm_offset(game.address.entity_list_entry, sum, &mut entity_address) {
+                        // Memory read failed - could be map transition
                         remove_esp(i);
                         continue;
                     }
@@ -281,6 +339,8 @@ pub fn run_cheats_thread(hwnd: HWND, self_hwnd: HWND) {
                 // Is Friendly
                 let exclude_team = config.settings.enabled && config.settings.exclude_team;
                 let is_friendly = entity.controller.team_id == local_entity.controller.team_id;
+
+
 
                 // Team Check
                 if exclude_team && is_friendly {
